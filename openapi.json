@@ -48,14 +48,14 @@
         }
       }
     },
-    "/v1/otp/generate": {
+    "/crm/v1/otp/generate": {
       "post": {
         "tags": [
           "otp"
         ],
         "summary": "Generate Otp",
         "description": "Side effects: sends a real SMS/email/WhatsApp message (per-send cost). Passing `otp` triggers the upstream resend flow. Rate limited per user_id.",
-        "operationId": "generate_otp_v1_otp_generate_post",
+        "operationId": "generate_otp_crm_v1_otp_generate_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -110,13 +110,13 @@
         }
       }
     },
-    "/v1/otp/validate": {
+    "/crm/v1/otp/validate": {
       "post": {
         "tags": [
           "otp"
         ],
         "summary": "Validate Otp",
-        "operationId": "validate_otp_v1_otp_validate_post",
+        "operationId": "validate_otp_crm_v1_otp_validate_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -171,13 +171,13 @@
         }
       }
     },
-    "/v1/applications": {
+    "/crm/v1/applications": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "List Applications",
-        "operationId": "list_applications_v1_applications_get",
+        "operationId": "list_applications_crm_v1_applications_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -226,7 +226,7 @@
           "contact-information"
         ],
         "summary": "Create Application",
-        "operationId": "create_application_v1_applications_post",
+        "operationId": "create_application_crm_v1_applications_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -281,13 +281,13 @@
         }
       }
     },
-    "/v1/applications/{application_id}": {
+    "/crm/v1/applications/{application_id}": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Get Application",
-        "operationId": "get_application_v1_applications__application_id__get",
+        "operationId": "get_application_crm_v1_applications__application_id__get",
         "parameters": [
           {
             "name": "application_id",
@@ -347,7 +347,7 @@
           "contact-information"
         ],
         "summary": "Patch Application",
-        "operationId": "patch_application_v1_applications__application_id__patch",
+        "operationId": "patch_application_crm_v1_applications__application_id__patch",
         "parameters": [
           {
             "name": "application_id",
@@ -413,14 +413,14 @@
         }
       }
     },
-    "/v1/applications/{application_id}/substatus": {
+    "/crm/v1/applications/{application_id}/substatus": {
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Application Substatus",
         "description": "Directly advances the application state machine; substatus_id must exist in the upstream catalog.",
-        "operationId": "patch_application_substatus_v1_applications__application_id__substatus_patch",
+        "operationId": "patch_application_substatus_crm_v1_applications__application_id__substatus_patch",
         "parameters": [
           {
             "name": "application_id",
@@ -486,14 +486,14 @@
         }
       }
     },
-    "/v1/applications/{application_id}/kyc": {
+    "/crm/v1/applications/{application_id}/kyc": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Create Application Kyc",
         "description": "Side effect: advances the application substatus to 4 (KYC captured).",
-        "operationId": "create_application_kyc_v1_applications__application_id__kyc_post",
+        "operationId": "create_application_kyc_crm_v1_applications__application_id__kyc_post",
         "parameters": [
           {
             "name": "application_id",
@@ -563,7 +563,7 @@
           "contact-information"
         ],
         "summary": "Patch Application Kyc",
-        "operationId": "patch_application_kyc_v1_applications__application_id__kyc_patch",
+        "operationId": "patch_application_kyc_crm_v1_applications__application_id__kyc_patch",
         "parameters": [
           {
             "name": "application_id",
@@ -629,13 +629,13 @@
         }
       }
     },
-    "/v1/otp-logs": {
+    "/crm/v1/otp-logs": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Create Otp Log",
-        "operationId": "create_otp_log_v1_otp_logs_post",
+        "operationId": "create_otp_log_crm_v1_otp_logs_post",
         "requestBody": {
           "required": true,
           "content": {
@@ -694,7 +694,7 @@
           "contact-information"
         ],
         "summary": "List Otp Logs",
-        "operationId": "list_otp_logs_v1_otp_logs_get",
+        "operationId": "list_otp_logs_crm_v1_otp_logs_get",
         "parameters": [
           {
             "name": "contact_id",
@@ -750,13 +750,13 @@
         }
       }
     },
-    "/v1/otp-logs/{otp_log_id}": {
+    "/crm/v1/otp-logs/{otp_log_id}": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Get Otp Log",
-        "operationId": "get_otp_log_v1_otp_logs__otp_log_id__get",
+        "operationId": "get_otp_log_crm_v1_otp_logs__otp_log_id__get",
         "parameters": [
           {
             "name": "otp_log_id",
@@ -812,13 +812,13 @@
         }
       }
     },
-    "/v1/otp-logs/{otp_log_id}/verify": {
+    "/crm/v1/otp-logs/{otp_log_id}/verify": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Verify Otp Log",
-        "operationId": "verify_otp_log_v1_otp_logs__otp_log_id__verify_post",
+        "operationId": "verify_otp_log_crm_v1_otp_logs__otp_log_id__verify_post",
         "parameters": [
           {
             "name": "otp_log_id",
@@ -884,13 +884,13 @@
         }
       }
     },
-    "/v1/otp-logs/{otp_log_id}/resend": {
+    "/crm/v1/otp-logs/{otp_log_id}/resend": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Resend Otp Log",
-        "operationId": "resend_otp_log_v1_otp_logs__otp_log_id__resend_post",
+        "operationId": "resend_otp_log_crm_v1_otp_logs__otp_log_id__resend_post",
         "parameters": [
           {
             "name": "otp_log_id",
@@ -946,13 +946,13 @@
         }
       }
     },
-    "/v1/utms": {
+    "/crm/v1/utms": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Utm",
-        "operationId": "upsert_utm_v1_utms_post",
+        "operationId": "upsert_utm_crm_v1_utms_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1007,13 +1007,13 @@
         }
       }
     },
-    "/v1/utms/{application_id}": {
+    "/crm/v1/utms/{application_id}": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Get Utm",
-        "operationId": "get_utm_v1_utms__application_id__get",
+        "operationId": "get_utm_crm_v1_utms__application_id__get",
         "parameters": [
           {
             "name": "application_id",
@@ -1069,14 +1069,14 @@
         }
       }
     },
-    "/v1/employment": {
+    "/crm/v1/employment": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Employment",
         "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured).",
-        "operationId": "upsert_employment_v1_employment_post",
+        "operationId": "upsert_employment_crm_v1_employment_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1131,13 +1131,13 @@
         }
       }
     },
-    "/v1/employment/{application_id}": {
+    "/crm/v1/employment/{application_id}": {
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Employment",
-        "operationId": "patch_employment_v1_employment__application_id__patch",
+        "operationId": "patch_employment_crm_v1_employment__application_id__patch",
         "parameters": [
           {
             "name": "application_id",
@@ -1203,13 +1203,13 @@
         }
       }
     },
-    "/v1/careers": {
+    "/crm/v1/careers": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Career",
-        "operationId": "upsert_career_v1_careers_post",
+        "operationId": "upsert_career_crm_v1_careers_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1264,13 +1264,13 @@
         }
       }
     },
-    "/v1/careers/{application_id}": {
+    "/crm/v1/careers/{application_id}": {
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Career",
-        "operationId": "patch_career_v1_careers__application_id__patch",
+        "operationId": "patch_career_crm_v1_careers__application_id__patch",
         "parameters": [
           {
             "name": "application_id",
@@ -1336,14 +1336,14 @@
         }
       }
     },
-    "/v1/fraud-eval/{application_id}": {
+    "/crm/v1/fraud-eval/{application_id}": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Fraud Eval",
         "description": "Proxies to risk-orchestration. Side effect: sets substatus 47 on approve or 84 on reject. Can return 502 if the risk service is down.",
-        "operationId": "fraud_eval_v1_fraud_eval__application_id__post",
+        "operationId": "fraud_eval_crm_v1_fraud_eval__application_id__post",
         "parameters": [
           {
             "name": "application_id",
@@ -1399,14 +1399,14 @@
         }
       }
     },
-    "/v1/offer-eval/{application_id}": {
+    "/crm/v1/offer-eval/{application_id}": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Offer Eval",
         "description": "Proxies to risk-orchestration. Side effect: sets substatus 54 on approve or 15 on reject. Can return 502 if the risk service is down.",
-        "operationId": "offer_eval_v1_offer_eval__application_id__post",
+        "operationId": "offer_eval_crm_v1_offer_eval__application_id__post",
         "parameters": [
           {
             "name": "application_id",
@@ -1462,13 +1462,13 @@
         }
       }
     },
-    "/v1/postal-codes/{zipcode}": {
+    "/crm/v1/postal-codes/{zipcode}": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Postal Codes",
-        "operationId": "postal_codes_v1_postal_codes__zipcode__get",
+        "operationId": "postal_codes_crm_v1_postal_codes__zipcode__get",
         "parameters": [
           {
             "name": "zipcode",
@@ -1522,13 +1522,13 @@
         }
       }
     },
-    "/v1/analytics/events": {
+    "/crm/v1/analytics/events": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Analytics Events",
-        "operationId": "analytics_events_v1_analytics_events_post",
+        "operationId": "analytics_events_crm_v1_analytics_events_post",
         "requestBody": {
           "content": {
             "application/json": {
