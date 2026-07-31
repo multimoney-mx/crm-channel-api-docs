@@ -11,7 +11,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "CRM Channel API",
-    "description": "Experience API that fronts internal CRM microservices (contact-information-xp, mm-otp-xp, customer-score-svc) behind a single, typed, consistently-enveloped contract.",
+    "description": "Experience API that fronts internal CRM microservices (contact-information-xp, mm-otp-xp, customer-score-svc) behind a single, typed, consistently-enveloped contract.\n\n## Authentication\n\nThe API is fronted by the external gateway, which requires an OAuth2 access\ntoken obtained with the **client credentials** flow from AWS Cognito.\nCredentials are issued per consumer \u2014 request them from the platform team.\n\n```sh\ncurl -X POST https://mm-dev-auth.auth.us-west-1.amazoncognito.com/oauth2/token \\\n  -H \"Content-Type: application/x-www-form-urlencoded\" \\\n  -d \"grant_type=client_credentials\" \\\n  -d \"client_id=<CLIENT_ID>\" \\\n  -d \"client_secret=<CLIENT_SECRET>\" \\\n  -d \"scope=https://api.dev.multimoney.tech/read\"\n```\n\nSend the returned `access_token` on every request:\n\n```\nAuthorization: Bearer <access_token>\n```\n\nTokens expire (`expires_in`, seconds); request a new one when they do.\n",
     "version": "0.1.1"
   },
   "paths": {
@@ -2699,8 +2699,28 @@
         ],
         "title": "ValidateOTPResponse"
       }
+    },
+    "securitySchemes": {
+      "OAuth2ClientCredentials": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://mm-dev-auth.auth.us-west-1.amazoncognito.com/oauth2/token",
+            "scopes": {
+              "https://api.dev.multimoney.tech/read": "API access"
+            }
+          }
+        }
+      }
     }
   },
+  "security": [
+    {
+      "OAuth2ClientCredentials": [
+        "https://api.dev.multimoney.tech/read"
+      ]
+    }
+  ],
   "servers": [
     {
       "url": "",
