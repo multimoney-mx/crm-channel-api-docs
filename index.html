@@ -290,21 +290,21 @@
         }
       }
     },
-    "/crm/v1/applications/{application_id}": {
+    "/crm/v1/applications/{bid}": {
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Get Application",
-        "operationId": "get_application_crm_v1_applications__application_id__get",
+        "operationId": "get_application_crm_v1_applications__bid__get",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -356,15 +356,15 @@
           "contact-information"
         ],
         "summary": "Patch Application",
-        "operationId": "patch_application_crm_v1_applications__application_id__patch",
+        "operationId": "patch_application_crm_v1_applications__bid__patch",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -422,22 +422,22 @@
         }
       }
     },
-    "/crm/v1/applications/{application_id}/substatus": {
+    "/crm/v1/applications/{bid}/substatus": {
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Application Substatus",
         "description": "Directly advances the application state machine; substatus_id must exist in the upstream catalog.",
-        "operationId": "patch_application_substatus_crm_v1_applications__application_id__substatus_patch",
+        "operationId": "patch_application_substatus_crm_v1_applications__bid__substatus_patch",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -495,22 +495,22 @@
         }
       }
     },
-    "/crm/v1/applications/{application_id}/kyc": {
+    "/crm/v1/applications/{bid}/kyc": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Create Application Kyc",
         "description": "Side effect: advances the application substatus to 4 (KYC captured).",
-        "operationId": "create_application_kyc_crm_v1_applications__application_id__kyc_post",
+        "operationId": "create_application_kyc_crm_v1_applications__bid__kyc_post",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -572,15 +572,15 @@
           "contact-information"
         ],
         "summary": "Patch Application Kyc",
-        "operationId": "patch_application_kyc_crm_v1_applications__application_id__kyc_patch",
+        "operationId": "patch_application_kyc_crm_v1_applications__bid__kyc_patch",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -955,22 +955,34 @@
         }
       }
     },
-    "/crm/v1/utms": {
+    "/crm/v1/applications/{bid}/utms": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Utm",
-        "operationId": "upsert_utm_crm_v1_utms_post",
+        "description": "Upsert (201 insert / 200 update). At least one UTM field is required.",
+        "operationId": "upsert_utm_crm_v1_applications__bid__utms_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UtmInput"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -1014,23 +1026,21 @@
             }
           }
         }
-      }
-    },
-    "/crm/v1/utms/{application_id}": {
+      },
       "get": {
         "tags": [
           "contact-information"
         ],
         "summary": "Get Utm",
-        "operationId": "get_utm_crm_v1_utms__application_id__get",
+        "operationId": "get_utm_crm_v1_applications__bid__utms_get",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -1078,23 +1088,34 @@
         }
       }
     },
-    "/crm/v1/employment": {
+    "/crm/v1/applications/{bid}/employment": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Employment",
         "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured).",
-        "operationId": "upsert_employment_crm_v1_employment_post",
+        "operationId": "upsert_employment_crm_v1_applications__bid__employment_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/EmploymentInput"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -1138,23 +1159,21 @@
             }
           }
         }
-      }
-    },
-    "/crm/v1/employment/{application_id}": {
+      },
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Employment",
-        "operationId": "patch_employment_crm_v1_employment__application_id__patch",
+        "operationId": "patch_employment_crm_v1_applications__bid__employment_patch",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -1212,22 +1231,34 @@
         }
       }
     },
-    "/crm/v1/careers": {
+    "/crm/v1/applications/{bid}/careers": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Upsert Career",
-        "operationId": "upsert_career_crm_v1_careers_post",
+        "description": "Upsert (201 insert / 200 update).",
+        "operationId": "upsert_career_crm_v1_applications__bid__careers_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CareerInput"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -1271,23 +1302,21 @@
             }
           }
         }
-      }
-    },
-    "/crm/v1/careers/{application_id}": {
+      },
       "patch": {
         "tags": [
           "contact-information"
         ],
         "summary": "Patch Career",
-        "operationId": "patch_career_crm_v1_careers__application_id__patch",
+        "operationId": "patch_career_crm_v1_applications__bid__careers_patch",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -1345,22 +1374,525 @@
         }
       }
     },
-    "/crm/v1/fraud-eval/{application_id}": {
+    "/crm/v1/applications/{bid}/biometrics/status": {
+      "get": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Status",
+        "operationId": "biometrics_status_crm_v1_applications__bid__biometrics_status_get",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/biometrics/start": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Start",
+        "description": "Creates an Incode session and returns the SDK token. Can return 502 if the biometrics provider is down.",
+        "operationId": "biometrics_start_crm_v1_applications__bid__biometrics_start_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/biometrics/ocr-id": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Ocr Id",
+        "operationId": "biometrics_ocr_id_crm_v1_applications__bid__biometrics_ocr_id_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/biometrics/selfie": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Selfie",
+        "operationId": "biometrics_selfie_crm_v1_applications__bid__biometrics_selfie_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/biometrics/ocr-doc": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Ocr Doc",
+        "operationId": "biometrics_ocr_doc_crm_v1_applications__bid__biometrics_ocr_doc_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/biometrics/finish": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Biometrics Finish",
+        "description": "Finishes the Incode session and returns the raw scores. Can return 502 if the biometrics provider is down.",
+        "operationId": "biometrics_finish_crm_v1_applications__bid__biometrics_finish_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BiometricsFinishInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/applications/{bid}/access-tokens": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Create Access Token",
+        "description": "Issues a short-lived token to embed in a QR code so the mobile client can resume the given flow.",
+        "operationId": "create_access_token_crm_v1_applications__bid__access_tokens_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessTokenCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/access-tokens/validate": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Validate Access Token",
+        "description": "Validates a QR access token. Upstream returns 404 (unknown), 409 (already used), or 410 (expired).",
+        "operationId": "validate_access_token_crm_v1_access_tokens_validate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessTokenValidate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/fraud-eval/{bid}": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Fraud Eval",
         "description": "Proxies to risk-orchestration. Side effect: sets substatus 47 on approve or 84 on reject. Can return 502 if the risk service is down.",
-        "operationId": "fraud_eval_crm_v1_fraud_eval__application_id__post",
+        "operationId": "fraud_eval_crm_v1_fraud_eval__bid__post",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -1408,22 +1940,22 @@
         }
       }
     },
-    "/crm/v1/offer-eval/{application_id}": {
+    "/crm/v1/offer-eval/{bid}": {
       "post": {
         "tags": [
           "contact-information"
         ],
         "summary": "Offer Eval",
         "description": "Proxies to risk-orchestration. Side effect: sets substatus 54 on approve or 15 on reject. Can return 502 if the risk service is down.",
-        "operationId": "offer_eval_crm_v1_offer_eval__application_id__post",
+        "operationId": "offer_eval_crm_v1_offer_eval__bid__post",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "bid",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Application Id"
+              "title": "Bid"
             }
           }
         ],
@@ -1593,6 +2125,36 @@
   },
   "components": {
     "schemas": {
+      "AccessTokenCreate": {
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "biometrics",
+              "contract"
+            ],
+            "title": "Purpose"
+          }
+        },
+        "type": "object",
+        "required": [
+          "purpose"
+        ],
+        "title": "AccessTokenCreate"
+      },
+      "AccessTokenValidate": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "AccessTokenValidate"
+      },
       "AggregateHealthResponse": {
         "properties": {
           "status": {
@@ -1641,13 +2203,14 @@
           "sessionId": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "number"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Sessionid"
+            "title": "Sessionid",
+            "description": "Session start time in milliseconds since epoch."
           },
           "identify": {
             "anyOf": [
@@ -1699,7 +2262,7 @@
             "type": "string",
             "maxLength": 5,
             "minLength": 2,
-            "pattern": "^[A-Z]+$",
+            "pattern": "^[A-Za-z]{2,5}$",
             "title": "Prefix"
           },
           "phone": {
@@ -1732,12 +2295,26 @@
         ],
         "title": "ApplicationCreate"
       },
+      "BiometricsFinishInput": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "interviewId": {
+            "type": "string",
+            "title": "Interviewid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token",
+          "interviewId"
+        ],
+        "title": "BiometricsFinishInput"
+      },
       "CareerInput": {
         "properties": {
-          "application_id": {
-            "type": "string",
-            "title": "Application Id"
-          },
           "education_level": {
             "type": "string",
             "enum": [
@@ -1789,7 +2366,6 @@
         },
         "type": "object",
         "required": [
-          "application_id",
           "education_level"
         ],
         "title": "CareerInput"
@@ -1870,10 +2446,6 @@
       },
       "EmploymentInput": {
         "properties": {
-          "application_id": {
-            "type": "string",
-            "title": "Application Id"
-          },
           "employer_name": {
             "type": "string",
             "title": "Employer Name"
@@ -1945,7 +2517,6 @@
         },
         "type": "object",
         "required": [
-          "application_id",
           "employer_name",
           "monthly_income",
           "seniority_months",
@@ -2218,6 +2789,26 @@
             "type": "string",
             "title": "Gender"
           },
+          "street": {
+            "type": "string",
+            "title": "Street"
+          },
+          "exterior_number": {
+            "type": "string",
+            "title": "Exterior Number"
+          },
+          "neighborhood": {
+            "type": "string",
+            "title": "Neighborhood"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "zip_code": {
+            "type": "string",
+            "title": "Zip Code"
+          },
           "second_name": {
             "anyOf": [
               {
@@ -2250,61 +2841,6 @@
               }
             ],
             "title": "Rfc"
-          },
-          "street": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Street"
-          },
-          "exterior_number": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Exterior Number"
-          },
-          "neighborhood": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Neighborhood"
-          },
-          "city": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "City"
-          },
-          "zip_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Zip Code"
           }
         },
         "type": "object",
@@ -2314,7 +2850,12 @@
           "maternal_last_name",
           "date_of_birth",
           "birth_state",
-          "gender"
+          "gender",
+          "street",
+          "exterior_number",
+          "neighborhood",
+          "city",
+          "zip_code"
         ],
         "title": "KycCreate"
       },
@@ -2578,10 +3119,6 @@
       },
       "UtmInput": {
         "properties": {
-          "application_id": {
-            "type": "string",
-            "title": "Application Id"
-          },
           "channel": {
             "anyOf": [
               {
@@ -2650,10 +3187,8 @@
           }
         },
         "type": "object",
-        "required": [
-          "application_id"
-        ],
-        "title": "UtmInput"
+        "title": "UtmInput",
+        "description": "At least one UTM field is required by the upstream."
       },
       "ValidateOTPRequest": {
         "properties": {
