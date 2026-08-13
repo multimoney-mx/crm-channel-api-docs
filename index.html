@@ -11,7 +11,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "CRM Channel API",
-    "description": "Experience API that fronts internal CRM microservices (contact-information-xp, mm-otp-xp, customer-score-svc) behind a single, typed, consistently-enveloped contract.\n\n## Authentication\n\nThe API is fronted by the external gateway, which requires an OAuth2 access\ntoken obtained with the **client credentials** flow from AWS Cognito.\nCredentials are issued per consumer \u2014 request them from the platform team.\n\n```sh\ncurl -X POST https://mm-dev-auth.auth.us-west-1.amazoncognito.com/oauth2/token \\\n  -H \"Content-Type: application/x-www-form-urlencoded\" \\\n  -d \"grant_type=client_credentials\" \\\n  -d \"client_id=<CLIENT_ID>\" \\\n  -d \"client_secret=<CLIENT_SECRET>\" \\\n  -d \"scope=https://api.dev.multimoney.tech/read\"\n```\n\nSend the returned `access_token` on every request:\n\n```\nAuthorization: Bearer <access_token>\n```\n\nTokens expire (`expires_in`, seconds); request a new one when they do.\n",
+    "description": "Experience API that fronts internal CRM microservices (contact-information-xp, mm-otp-xp, customer-score-svc, systems-operations-journal) behind a single, typed, consistently-enveloped contract.\n\n## Authentication\n\nThe API is fronted by the external gateway, which requires an OAuth2 access\ntoken obtained with the **client credentials** flow from AWS Cognito.\nCredentials are issued per consumer \u2014 request them from the platform team.\n\n```sh\ncurl -X POST https://mm-dev-auth.auth.us-west-1.amazoncognito.com/oauth2/token \\\n  -H \"Content-Type: application/x-www-form-urlencoded\" \\\n  -d \"grant_type=client_credentials\" \\\n  -d \"client_id=<CLIENT_ID>\" \\\n  -d \"client_secret=<CLIENT_SECRET>\" \\\n  -d \"scope=https://api.dev.multimoney.tech/read\"\n```\n\nSend the returned `access_token` on every request:\n\n```\nAuthorization: Bearer <access_token>\n```\n\nTokens expire (`expires_in`, seconds); request a new one when they do.\n",
     "version": "0.1.1"
   },
   "paths": {
@@ -2121,6 +2121,109 @@
           }
         }
       }
+    },
+    "/crm/v1/journal": {
+      "get": {
+        "tags": [
+          "journal"
+        ],
+        "summary": "List Journal",
+        "description": "Operation-journal entries (systems-operations-journal), filtered by bid/service.",
+        "operationId": "list_journal_crm_v1_journal_get",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Bid"
+            }
+          },
+          {
+            "name": "serviceName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Servicename"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassthroughResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2982,6 +3085,13 @@
           "success"
         ],
         "title": "OtpLogVerify"
+      },
+      "PassthroughResponse": {
+        "properties": {},
+        "additionalProperties": true,
+        "type": "object",
+        "title": "PassthroughResponse",
+        "description": "Bureau responses vary in shape (additionalProperties: true upstream)."
       },
       "PhonePatch": {
         "properties": {
