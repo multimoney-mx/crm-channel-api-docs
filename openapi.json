@@ -1743,7 +1743,7 @@
           "contact-information"
         ],
         "summary": "Create Access Token",
-        "description": "Issues a short-lived token to embed in a QR code so the mobile client can resume the given flow.",
+        "description": "Issues a short-lived token to embed in a QR code so the mobile client can resume the given flow. `link` is built by this gateway from APP_DOMAIN_URL; the upstream returns only the token fields.",
         "operationId": "create_access_token_crm_v1_applications__bid__access_tokens_post",
         "parameters": [
           {
@@ -1771,7 +1771,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/AccessTokenResponse"
+                }
               }
             }
           },
@@ -2225,6 +2227,8 @@
             "type": "string",
             "enum": [
               "biometrics",
+              "biometrics-journey",
+              "banking",
               "contract"
             ],
             "title": "Purpose"
@@ -2235,6 +2239,35 @@
           "purpose"
         ],
         "title": "AccessTokenCreate"
+      },
+      "AccessTokenResponse": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "expiresAt": {
+            "type": "string",
+            "title": "Expiresat"
+          },
+          "ttlMinutes": {
+            "type": "integer",
+            "title": "Ttlminutes"
+          },
+          "link": {
+            "type": "string",
+            "title": "Link",
+            "description": "Deep link to embed in the QR code."
+          }
+        },
+        "type": "object",
+        "required": [
+          "token",
+          "expiresAt",
+          "ttlMinutes",
+          "link"
+        ],
+        "title": "AccessTokenResponse"
       },
       "AccessTokenValidate": {
         "properties": {
