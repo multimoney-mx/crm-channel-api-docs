@@ -2217,6 +2217,456 @@
           }
         }
       }
+    },
+    "/crm/v1/sale": {
+      "post": {
+        "tags": [
+          "sale"
+        ],
+        "summary": "Create sale",
+        "description": "Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when a supplied catalog name does not match any entry.",
+        "operationId": "create_sale_crm_v1_sale_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSaleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSaleResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/sale/signed": {
+      "post": {
+        "tags": [
+          "sale"
+        ],
+        "summary": "Contract signed callback",
+        "description": "Notifies the api core that the contract was signed via Incode.",
+        "operationId": "contract_signed_crm_v1_sale_signed_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContractSignedRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractSignedResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/sale/disburse": {
+      "post": {
+        "tags": [
+          "sale"
+        ],
+        "summary": "Manual disburse",
+        "description": "Manually triggers disbursement for a sale. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
+        "operationId": "manual_disburse_crm_v1_sale_disburse_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualDisburseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManualDisburseResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/sale/documents/{bid}": {
+      "get": {
+        "tags": [
+          "sale"
+        ],
+        "summary": "Get document status for a sale request",
+        "description": "Returns whether a `DOCUMENT_LOAD` and a `DOCUMENT_SIGN` event have each been recorded for the given sale request ID. Both flags are `false` when no matching events exist \u2014 the endpoint always returns 200.",
+        "operationId": "document_status_crm_v1_sale_documents__bid__get",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d+$",
+              "description": "Numeric sale request ID (bid)",
+              "title": "Bid"
+            },
+            "description": "Numeric sale request ID (bid)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentStatusResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/catalog": {
+      "post": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "List catalog items",
+        "description": "`action` selects the catalog type. `idState` is required when `action` is `Municipality`; `postalCode` is required when `action` is `Neighborhood`.",
+        "operationId": "list_catalog_crm_v1_catalog_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListCatalogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GenericCatalogDto"
+                  },
+                  "type": "array",
+                  "title": "Response List Catalog Crm V1 Catalog Post"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/catalog/postal-code": {
+      "post": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Get postal code data",
+        "description": "Returns geographic breakdown (state, municipality, district, city) for the given postal code.",
+        "operationId": "postal_code_crm_v1_catalog_postal_code_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPostalCodeDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PostalCodeDto"
+                  },
+                  "type": "array",
+                  "title": "Response Postal Code Crm V1 Catalog Postal Code Post"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/credit/financial-scenarios": {
+      "post": {
+        "tags": [
+          "credit"
+        ],
+        "summary": "Calculate financial scenarios",
+        "description": "Returns available financial scenarios for the given product and client parameters. Each scenario carries ~35 fields from the api core (`EscenariosFinancierosResponseDto`).",
+        "operationId": "financial_scenarios_crm_v1_credit_financial_scenarios_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetFinancialScenariosRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PassthroughResponse"
+                  },
+                  "type": "array",
+                  "title": "Response Financial Scenarios Crm V1 Credit Financial Scenarios Post"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2281,6 +2731,85 @@
           "token"
         ],
         "title": "AccessTokenValidate"
+      },
+      "AddressRequest": {
+        "properties": {
+          "state": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "municipality": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipality"
+          },
+          "district": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "District"
+          },
+          "street": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Street"
+          },
+          "externalNumber": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Externalnumber"
+          },
+          "internalNumber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internalnumber"
+          },
+          "zipCode": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Zipcode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "street",
+          "externalNumber",
+          "zipCode"
+        ],
+        "title": "AddressRequest"
       },
       "AggregateHealthResponse": {
         "properties": {
@@ -2422,6 +2951,31 @@
         ],
         "title": "ApplicationCreate"
       },
+      "BankAccountRequest": {
+        "properties": {
+          "bankCode": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Bankcode"
+          },
+          "accountNumber": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Accountnumber"
+          },
+          "bankAccountId": {
+            "type": "integer",
+            "title": "Bankaccountid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bankCode",
+          "accountNumber",
+          "bankAccountId"
+        ],
+        "title": "BankAccountRequest"
+      },
       "BiometricsFinishInput": {
         "properties": {
           "token": {
@@ -2558,6 +3112,330 @@
         "type": "object",
         "title": "CareerPatch"
       },
+      "ContractSignedRequest": {
+        "properties": {
+          "user": {
+            "type": "string",
+            "minLength": 1,
+            "title": "User"
+          },
+          "incodeAccessToken": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Incodeaccesstoken"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user",
+          "incodeAccessToken"
+        ],
+        "title": "ContractSignedRequest"
+      },
+      "ContractSignedResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "ContractSignedResponse"
+      },
+      "CreateSaleRequest": {
+        "properties": {
+          "user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User"
+          },
+          "uniqueIdentifier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uniqueidentifier"
+          },
+          "incode": {
+            "$ref": "#/components/schemas/IncodeRequest"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "creditOffer": {
+            "$ref": "#/components/schemas/CreditOfferRequest"
+          },
+          "bankAccount": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "references": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ReferenceRequest"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "References"
+          }
+        },
+        "type": "object",
+        "required": [
+          "incode",
+          "customer",
+          "address",
+          "creditOffer",
+          "bankAccount"
+        ],
+        "title": "CreateSaleRequest"
+      },
+      "CreateSaleResponse": {
+        "properties": {
+          "saleId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Saleid"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "CreateSaleResponse"
+      },
+      "CreditOfferRequest": {
+        "properties": {
+          "saleAmount": {
+            "type": "number",
+            "title": "Saleamount"
+          },
+          "creditLimit": {
+            "type": "number",
+            "title": "Creditlimit"
+          },
+          "installmentAmount": {
+            "type": "number",
+            "title": "Installmentamount"
+          },
+          "term": {
+            "type": "integer",
+            "title": "Term"
+          },
+          "product": {
+            "type": "integer",
+            "title": "Product"
+          },
+          "cycle": {
+            "type": "integer",
+            "title": "Cycle"
+          },
+          "termPromotion": {
+            "type": "integer",
+            "title": "Termpromotion"
+          },
+          "segmentId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Segmentid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "saleAmount",
+          "creditLimit",
+          "installmentAmount",
+          "term",
+          "product",
+          "cycle",
+          "termPromotion"
+        ],
+        "title": "CreditOfferRequest"
+      },
+      "CustomerRequest": {
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Firstname"
+          },
+          "middleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Middlename"
+          },
+          "firstLastName": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Firstlastname"
+          },
+          "secondLastName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secondlastname"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dateofbirth"
+          },
+          "placeOfBirth": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placeofbirth"
+          },
+          "curp": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Curp"
+          },
+          "rfc": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Rfc"
+          },
+          "voterIdKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voteridkey"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Gender"
+          },
+          "profession": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profession"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Phonenumber"
+          },
+          "grossMonthlyIncome": {
+            "type": "number",
+            "title": "Grossmonthlyincome"
+          },
+          "occupation": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occupation"
+          },
+          "employer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "firstName",
+          "firstLastName",
+          "dateOfBirth",
+          "curp",
+          "rfc",
+          "gender",
+          "email",
+          "phoneNumber",
+          "grossMonthlyIncome"
+        ],
+        "title": "CustomerRequest"
+      },
       "DataEnvelope": {
         "properties": {
           "data": {
@@ -2570,6 +3448,24 @@
         ],
         "title": "DataEnvelope",
         "description": "contact-information-xp wraps all success bodies as {\"data\": ...}.\n\nEntity shapes are DB-backed and numerous; the gateway forwards them\nverbatim inside this envelope."
+      },
+      "DocumentStatusResponse": {
+        "properties": {
+          "contract_generated": {
+            "type": "boolean",
+            "title": "Contract Generated"
+          },
+          "contract_signed": {
+            "type": "boolean",
+            "title": "Contract Signed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contract_generated",
+          "contract_signed"
+        ],
+        "title": "DocumentStatusResponse"
       },
       "EmploymentInput": {
         "properties": {
@@ -2879,6 +3775,107 @@
         ],
         "title": "GenerateOTPResponse"
       },
+      "GenericCatalogDto": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "secondaryCode": {
+            "type": "string",
+            "title": "Secondarycode"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "secondaryCode",
+          "description"
+        ],
+        "title": "GenericCatalogDto"
+      },
+      "GetFinancialScenariosRequest": {
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "title": "Productid"
+          },
+          "creditLimit": {
+            "type": "number",
+            "title": "Creditlimit"
+          },
+          "maxQuota": {
+            "type": "number",
+            "title": "Maxquota"
+          },
+          "disbursementAmount": {
+            "type": "number",
+            "title": "Disbursementamount"
+          },
+          "commerce": {
+            "type": "integer",
+            "title": "Commerce"
+          },
+          "cycle": {
+            "type": "integer",
+            "title": "Cycle"
+          },
+          "appId": {
+            "type": "integer",
+            "title": "Appid"
+          },
+          "clientId": {
+            "type": "integer",
+            "title": "Clientid"
+          },
+          "disbursementFormId": {
+            "type": "integer",
+            "title": "Disbursementformid"
+          },
+          "user": {
+            "type": "string",
+            "minLength": 1,
+            "title": "User"
+          },
+          "ownScenario": {
+            "type": "boolean",
+            "title": "Ownscenario"
+          }
+        },
+        "type": "object",
+        "required": [
+          "productId",
+          "creditLimit",
+          "maxQuota",
+          "disbursementAmount",
+          "commerce",
+          "cycle",
+          "appId",
+          "clientId",
+          "disbursementFormId",
+          "user",
+          "ownScenario"
+        ],
+        "title": "GetFinancialScenariosRequest"
+      },
+      "GetPostalCodeDataRequest": {
+        "properties": {
+          "postalCode": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Postalcode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "postalCode"
+        ],
+        "title": "GetPostalCodeDataRequest"
+      },
       "HealthResponse": {
         "properties": {
           "status": {
@@ -2889,6 +3886,26 @@
         },
         "type": "object",
         "title": "HealthResponse"
+      },
+      "IncodeRequest": {
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Accesstoken"
+          },
+          "signLink": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Signlink"
+          }
+        },
+        "type": "object",
+        "required": [
+          "accessToken",
+          "signLink"
+        ],
+        "title": "IncodeRequest"
       },
       "KycCreate": {
         "properties": {
@@ -3069,6 +4086,139 @@
         "type": "object",
         "title": "KycPatch"
       },
+      "ListCatalogRequest": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "State",
+              "Municipality",
+              "Neighborhood",
+              "City",
+              "Gender",
+              "Profession",
+              "Occupation",
+              "EconomicActivity",
+              "StudyLevel",
+              "BankEntities",
+              "ZoneType",
+              "SettlementType"
+            ],
+            "title": "Action"
+          },
+          "idState": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idstate"
+          },
+          "postalCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Postalcode"
+          },
+          "idNeighborhood": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idneighborhood"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "title": "ListCatalogRequest"
+      },
+      "ManualDisburseRequest": {
+        "properties": {
+          "saleId": {
+            "type": "integer",
+            "title": "Saleid"
+          },
+          "user": {
+            "type": "string",
+            "minLength": 1,
+            "title": "User"
+          },
+          "finalStatus": {
+            "type": "string",
+            "enum": [
+              "Activo",
+              "Anulado"
+            ],
+            "title": "Finalstatus"
+          },
+          "promissoryNote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promissorynote"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "isReprocess": {
+            "type": "boolean",
+            "title": "Isreprocess",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "saleId",
+          "user",
+          "finalStatus"
+        ],
+        "title": "ManualDisburseRequest"
+      },
+      "ManualDisburseResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "message"
+        ],
+        "title": "ManualDisburseResponse"
+      },
       "OtpLogCreate": {
         "properties": {
           "contact_id": {
@@ -3129,6 +4279,54 @@
           "phone"
         ],
         "title": "PhonePatch"
+      },
+      "PostalCodeDto": {
+        "properties": {
+          "stateId": {
+            "type": "string",
+            "title": "Stateid"
+          },
+          "stateName": {
+            "type": "string",
+            "title": "Statename"
+          },
+          "municipalityId": {
+            "type": "string",
+            "title": "Municipalityid"
+          },
+          "municipalityName": {
+            "type": "string",
+            "title": "Municipalityname"
+          },
+          "districtId": {
+            "type": "string",
+            "title": "Districtid"
+          },
+          "districtName": {
+            "type": "string",
+            "title": "Districtname"
+          },
+          "cityId": {
+            "type": "string",
+            "title": "Cityid"
+          },
+          "cityName": {
+            "type": "string",
+            "title": "Cityname"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stateId",
+          "stateName",
+          "municipalityId",
+          "municipalityName",
+          "districtId",
+          "districtName",
+          "cityId",
+          "cityName"
+        ],
+        "title": "PostalCodeDto"
       },
       "ProblemDetail": {
         "properties": {
@@ -3207,6 +4405,37 @@
         ],
         "title": "ProblemDetail",
         "description": "RFC 9457 Problem Details for HTTP APIs.\n\nAll upstream error conventions ({error}, {success:false,...}, and native\nproblem+json) are normalized into this shape. `errors` and `upstream_status`\nare extension members (RFC 9457 \u00a73.2)."
+      },
+      "ReferenceRequest": {
+        "properties": {
+          "referenceNumber": {
+            "type": "integer",
+            "title": "Referencenumber"
+          },
+          "fullName": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Fullname"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Phonenumber"
+          },
+          "relationshipId": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Relationshipid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "referenceNumber",
+          "fullName",
+          "phoneNumber",
+          "relationshipId"
+        ],
+        "title": "ReferenceRequest"
       },
       "SubstatusPatch": {
         "properties": {
