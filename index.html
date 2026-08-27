@@ -2289,68 +2289,6 @@
         }
       }
     },
-    "/crm/v1/sale/signed": {
-      "post": {
-        "tags": [
-          "sale"
-        ],
-        "summary": "Contract signed callback",
-        "description": "Notifies the api core that the contract was signed via Incode.",
-        "operationId": "contract_signed_crm_v1_sale_signed_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ContractSignedRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ContractSignedResponse"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/crm/v1/sale/disburse": {
       "post": {
         "tags": [
@@ -2676,6 +2614,120 @@
           }
         }
       }
+    },
+    "/crm/v1/account-verification": {
+      "post": {
+        "tags": [
+          "account-verification"
+        ],
+        "summary": "Initiate bank account verification",
+        "description": "Enqueues a CLABE account verification via the Toku provider. `MM-Bin-Id` is used as `referenceId` to correlate the verification with the caller. Returns the Toku-assigned `idAccountValidation` and initial status (`PENDING` or `FAILED`).",
+        "operationId": "account_verification_crm_v1_account_verification_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountVerificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountVerificationResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm/v1/account-verification/check": {
+      "get": {
+        "tags": [
+          "account-verification"
+        ],
+        "summary": "Check bank account verification result",
+        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification linked to the `MM-Bin-Id` header. Returns 404 while the result is not yet available.",
+        "operationId": "account_checked_crm_v1_account_verification_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountCheckedResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2740,6 +2792,114 @@
           "token"
         ],
         "title": "AccessTokenValidate"
+      },
+      "AccountCheckedResponse": {
+        "properties": {
+          "step": {
+            "type": "string",
+            "enum": [
+              "DONE",
+              "FAILED"
+            ],
+            "title": "Step"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step"
+        ],
+        "title": "AccountCheckedResponse"
+      },
+      "AccountVerificationData": {
+        "properties": {
+          "idAccountValidation": {
+            "type": "string",
+            "title": "Idaccountvalidation"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "FAILED"
+            ],
+            "title": "Status"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idAccountValidation",
+          "status"
+        ],
+        "title": "AccountVerificationData"
+      },
+      "AccountVerificationRequest": {
+        "properties": {
+          "identification": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Identification",
+            "description": "CURP or RFC of the account holder."
+          },
+          "account": {
+            "type": "string",
+            "maxLength": 18,
+            "minLength": 18,
+            "title": "Account",
+            "description": "18-digit CLABE account number."
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token",
+            "description": "Pre-created verification token (UUID)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "identification",
+          "account"
+        ],
+        "title": "AccountVerificationRequest"
+      },
+      "AccountVerificationResponse": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AccountVerificationData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "title": "AccountVerificationResponse"
       },
       "AddressRequest": {
         "properties": {
@@ -3120,39 +3280,6 @@
         },
         "type": "object",
         "title": "CareerPatch"
-      },
-      "ContractSignedRequest": {
-        "properties": {
-          "user": {
-            "type": "string",
-            "minLength": 1,
-            "title": "User"
-          },
-          "incodeAccessToken": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Incodeaccesstoken"
-          }
-        },
-        "type": "object",
-        "required": [
-          "user",
-          "incodeAccessToken"
-        ],
-        "title": "ContractSignedRequest"
-      },
-      "ContractSignedResponse": {
-        "properties": {
-          "message": {
-            "type": "string",
-            "title": "Message"
-          }
-        },
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "title": "ContractSignedResponse"
       },
       "CreateSaleRequest": {
         "properties": {
