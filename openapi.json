@@ -2291,23 +2291,34 @@
         }
       }
     },
-    "/crm/v1/sale": {
+    "/crm/v1/sale/{bid}": {
       "post": {
         "tags": [
           "platform-core"
         ],
         "summary": "Create sale",
         "description": "Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when a supplied catalog name does not match any entry.",
-        "operationId": "create_sale_crm_v1_sale_post",
+        "operationId": "create_sale_crm_v1_sale__bid__post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateSaleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -2353,23 +2364,34 @@
         }
       }
     },
-    "/crm/v1/sale/disburse": {
+    "/crm/v1/sale/{bid}/disburse": {
       "post": {
         "tags": [
           "platform-core"
         ],
         "summary": "Manual disburse",
         "description": "Manually triggers disbursement for a sale. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
-        "operationId": "manual_disburse_crm_v1_sale_disburse_post",
+        "operationId": "manual_disburse_crm_v1_sale__bid__disburse_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ManualDisburseRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -2679,14 +2701,34 @@
         }
       }
     },
-    "/crm/v1/account-verification/check": {
+    "/crm/v1/account-verification/{bid}/check": {
       "get": {
         "tags": [
           "account-verification"
         ],
         "summary": "Check bank account verification result",
-        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification linked to the `MM-Bin-Id` header. Returns 404 while the result is not yet available.",
-        "operationId": "account_checked_crm_v1_account_verification_check_get",
+        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification identified by `bid` (referenceId) and `externalRef`. Returns 404 while the result is not yet available.",
+        "operationId": "account_checked_crm_v1_account_verification__bid__check_get",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          },
+          {
+            "name": "externalRef",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Externalref"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
