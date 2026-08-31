@@ -2687,6 +2687,58 @@
           }
         }
       }
+    },
+    "/crm/v1/account-verification/check": {
+      "get": {
+        "tags": [
+          "account-verification"
+        ],
+        "summary": "Check bank account verification result",
+        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification linked to the `MM-Bin-Id` header. Returns 404 while the result is not yet available.",
+        "operationId": "account_checked_crm_v1_account_verification_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountCheckedResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2751,6 +2803,23 @@
           "token"
         ],
         "title": "AccessTokenValidate"
+      },
+      "AccountCheckedResponse": {
+        "properties": {
+          "step": {
+            "type": "string",
+            "enum": [
+              "DONE",
+              "FAILED"
+            ],
+            "title": "Step"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step"
+        ],
+        "title": "AccountCheckedResponse"
       },
       "AddressRequest": {
         "properties": {
