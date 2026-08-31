@@ -1746,6 +1746,79 @@
         }
       }
     },
+    "/crm/v1/applications/{bid}/banking": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Create Banking",
+        "description": "Registers the bank account (CLABE) linked to the application. Forwards to contact-information-xp which handles the account verification flow.",
+        "operationId": "create_banking_crm_v1_applications__bid__banking_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankingInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/crm/v1/applications/{bid}/access-tokens": {
       "post": {
         "tags": [
@@ -2230,7 +2303,7 @@
     "/crm/v1/sale": {
       "post": {
         "tags": [
-          "sale"
+          "platform-core"
         ],
         "summary": "Create sale",
         "description": "Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when a supplied catalog name does not match any entry.",
@@ -2292,7 +2365,7 @@
     "/crm/v1/sale/disburse": {
       "post": {
         "tags": [
-          "sale"
+          "platform-core"
         ],
         "summary": "Manual disburse",
         "description": "Manually triggers disbursement for a sale. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
@@ -2354,7 +2427,7 @@
     "/crm/v1/sale/documents/{bid}": {
       "get": {
         "tags": [
-          "sale"
+          "platform-core"
         ],
         "summary": "Get document status for a sale request",
         "description": "Returns whether a `DOCUMENT_LOAD` and a `DOCUMENT_SIGN` event have each been recorded for the given sale request ID. Both flags are `false` when no matching events exist \u2014 the endpoint always returns 200.",
@@ -2420,7 +2493,7 @@
     "/crm/v1/catalog": {
       "post": {
         "tags": [
-          "catalog"
+          "platform-core"
         ],
         "summary": "List catalog items",
         "description": "`action` selects the catalog type. `idState` is required when `action` is `Municipality`; `postalCode` is required when `action` is `Neighborhood`.",
@@ -2486,7 +2559,7 @@
     "/crm/v1/catalog/postal-code": {
       "post": {
         "tags": [
-          "catalog"
+          "platform-core"
         ],
         "summary": "Get postal code data",
         "description": "Returns geographic breakdown (state, municipality, district, city) for the given postal code.",
@@ -2552,7 +2625,7 @@
     "/crm/v1/credit/financial-scenarios": {
       "post": {
         "tags": [
-          "credit"
+          "platform-core"
         ],
         "summary": "Calculate financial scenarios",
         "description": "Returns available financial scenarios for the given product and client parameters. Each scenario carries ~35 fields from the api core (`EscenariosFinancierosResponseDto`).",
@@ -2578,120 +2651,6 @@
                   },
                   "type": "array",
                   "title": "Response Financial Scenarios Crm V1 Credit Financial Scenarios Post"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/crm/v1/account-verification": {
-      "post": {
-        "tags": [
-          "account-verification"
-        ],
-        "summary": "Initiate bank account verification",
-        "description": "Enqueues a CLABE account verification via the Toku provider. `MM-Bin-Id` is used as `referenceId` to correlate the verification with the caller. Returns the Toku-assigned `idAccountValidation` and initial status (`PENDING` or `FAILED`).",
-        "operationId": "account_verification_crm_v1_account_verification_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AccountVerificationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountVerificationResponse"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/crm/v1/account-verification/check": {
-      "get": {
-        "tags": [
-          "account-verification"
-        ],
-        "summary": "Check bank account verification result",
-        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification linked to the `MM-Bin-Id` header. Returns 404 while the result is not yet available.",
-        "operationId": "account_checked_crm_v1_account_verification_check_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountCheckedResponse"
                 }
               }
             }
@@ -2792,114 +2751,6 @@
           "token"
         ],
         "title": "AccessTokenValidate"
-      },
-      "AccountCheckedResponse": {
-        "properties": {
-          "step": {
-            "type": "string",
-            "enum": [
-              "DONE",
-              "FAILED"
-            ],
-            "title": "Step"
-          }
-        },
-        "type": "object",
-        "required": [
-          "step"
-        ],
-        "title": "AccountCheckedResponse"
-      },
-      "AccountVerificationData": {
-        "properties": {
-          "idAccountValidation": {
-            "type": "string",
-            "title": "Idaccountvalidation"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "FAILED"
-            ],
-            "title": "Status"
-          },
-          "message": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Message"
-          },
-          "token": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Token"
-          }
-        },
-        "type": "object",
-        "required": [
-          "idAccountValidation",
-          "status"
-        ],
-        "title": "AccountVerificationData"
-      },
-      "AccountVerificationRequest": {
-        "properties": {
-          "identification": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Identification",
-            "description": "CURP or RFC of the account holder."
-          },
-          "account": {
-            "type": "string",
-            "maxLength": 18,
-            "minLength": 18,
-            "title": "Account",
-            "description": "18-digit CLABE account number."
-          },
-          "token": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Token",
-            "description": "Pre-created verification token (UUID)."
-          }
-        },
-        "type": "object",
-        "required": [
-          "identification",
-          "account"
-        ],
-        "title": "AccountVerificationRequest"
-      },
-      "AccountVerificationResponse": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/AccountVerificationData"
-          }
-        },
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "title": "AccountVerificationResponse"
       },
       "AddressRequest": {
         "properties": {
@@ -3144,6 +2995,29 @@
           "bankAccountId"
         ],
         "title": "BankAccountRequest"
+      },
+      "BankingInput": {
+        "properties": {
+          "clabe": {
+            "type": "string",
+            "maxLength": 18,
+            "minLength": 18,
+            "title": "Clabe",
+            "description": "18-digit CLABE account number."
+          },
+          "bankCode": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Bankcode",
+            "description": "Bank code."
+          }
+        },
+        "type": "object",
+        "required": [
+          "clabe",
+          "bankCode"
+        ],
+        "title": "BankingInput"
       },
       "BiometricsFinishInput": {
         "properties": {
