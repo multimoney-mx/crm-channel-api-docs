@@ -2796,11 +2796,18 @@
               "contract"
             ],
             "title": "Purpose"
+          },
+          "monto": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Monto",
+            "description": "Loan amount in MXN."
           }
         },
         "type": "object",
         "required": [
-          "purpose"
+          "purpose",
+          "monto"
         ],
         "title": "AccessTokenCreate"
       },
@@ -2822,6 +2829,11 @@
             "type": "string",
             "title": "Link",
             "description": "Deep link to embed in the QR code."
+          },
+          "customer_notified": {
+            "type": "boolean",
+            "title": "Customer Notified",
+            "description": "Whether a notification was dispatched to the client."
           }
         },
         "type": "object",
@@ -2829,7 +2841,8 @@
           "token",
           "expiresAt",
           "ttlMinutes",
-          "link"
+          "link",
+          "customer_notified"
         ],
         "title": "AccessTokenResponse"
       },
