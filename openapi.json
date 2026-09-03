@@ -4089,6 +4089,17 @@
             ],
             "title": "Second Name"
           },
+          "interior_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interior Number"
+          },
           "curp": {
             "anyOf": [
               {
@@ -4250,6 +4261,17 @@
               }
             ],
             "title": "Exterior Number"
+          },
+          "interior_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interior Number"
           },
           "neighborhood": {
             "anyOf": [
