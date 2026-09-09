@@ -500,9 +500,9 @@
         "tags": [
           "contact-information"
         ],
-        "summary": "Create Application Kyc",
-        "description": "Side effect: advances the application substatus to 4 (KYC captured).",
-        "operationId": "create_application_kyc_crm_v1_applications__bid__kyc_post",
+        "summary": "Upsert Application Kyc",
+        "description": "Create-or-update. Upstream has no GET for KYC, so the gateway PATCHes first: 200 means the record existed and was updated with only the fields sent. If upstream answers 404 (no KYC record yet) the gateway POSTs instead, filling any required field the caller omitted with a placeholder (five spaces for text, 1900-01-01 for date_of_birth) and returns 201. Side effect on create: advances the application substatus to 4 (KYC captured). Any other upstream error (400, 409 duplicate CURP/RFC, 5xx) is returned as-is.",
+        "operationId": "upsert_application_kyc_crm_v1_applications__bid__kyc_post",
         "parameters": [
           {
             "name": "bid",
@@ -519,13 +519,13 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/KycCreate"
+                "$ref": "#/components/schemas/KycPatch"
               }
             }
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
@@ -1094,7 +1094,7 @@
           "contact-information"
         ],
         "summary": "Upsert Employment",
-        "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured).",
+        "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured). employment_status may be omitted (or sent as null); upstream still requires it, so the gateway fills it with \"EMPLOYED\".",
         "operationId": "upsert_employment_crm_v1_applications__bid__employment_post",
         "parameters": [
           {
@@ -2306,7 +2306,7 @@
           "platform-core"
         ],
         "summary": "Create sale",
-        "description": "Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when a supplied catalog name does not match any entry.",
+        "description": "Validates that the CLABE account is verified before creating the sale. Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when the CLABE is not verified or a supplied catalog name does not match.",
         "operationId": "create_sale_crm_v1_sale__bid__post",
         "parameters": [
           {
@@ -2379,7 +2379,7 @@
           "platform-core"
         ],
         "summary": "Manual disburse",
-        "description": "Manually triggers disbursement for a sale. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
+        "description": "Validates that the CLABE account is verified before disbursing. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
         "operationId": "manual_disburse_crm_v1_sale__bid__disburse_post",
         "parameters": [
           {
@@ -3165,15 +3165,6 @@
         "properties": {
           "education_level": {
             "type": "string",
-            "enum": [
-              "SIN_ESTUDIOS",
-              "PRIMARIA",
-              "SECUNDARIA",
-              "PREPARATORIA",
-              "TECNICO",
-              "UNIVERSIDAD",
-              "POSGRADO"
-            ],
             "title": "Education Level"
           },
           "institution": {
@@ -3223,16 +3214,7 @@
           "education_level": {
             "anyOf": [
               {
-                "type": "string",
-                "enum": [
-                  "SIN_ESTUDIOS",
-                  "PRIMARIA",
-                  "SECUNDARIA",
-                  "PREPARATORIA",
-                  "TECNICO",
-                  "UNIVERSIDAD",
-                  "POSGRADO"
-                ]
+                "type": "string"
               },
               {
                 "type": "null"
@@ -3618,12 +3600,13 @@
             "title": "Seniority Months"
           },
           "employment_status": {
-            "type": "string",
-            "enum": [
-              "EMPLOYED",
-              "SELF_EMPLOYED",
-              "RETIRED",
-              "UNEMPLOYED"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
             ],
             "title": "Employment Status"
           },
@@ -3676,8 +3659,7 @@
         "required": [
           "employer_name",
           "monthly_income",
-          "seniority_months",
-          "employment_status"
+          "seniority_months"
         ],
         "title": "EmploymentInput"
       },
@@ -3721,13 +3703,7 @@
           "employment_status": {
             "anyOf": [
               {
-                "type": "string",
-                "enum": [
-                  "EMPLOYED",
-                  "SELF_EMPLOYED",
-                  "RETIRED",
-                  "UNEMPLOYED"
-                ]
+                "type": "string"
               },
               {
                 "type": "null"
@@ -4040,113 +4016,6 @@
           "signLink"
         ],
         "title": "IncodeRequest"
-      },
-      "KycCreate": {
-        "properties": {
-          "first_name": {
-            "type": "string",
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "title": "Last Name"
-          },
-          "maternal_last_name": {
-            "type": "string",
-            "title": "Maternal Last Name"
-          },
-          "date_of_birth": {
-            "type": "string",
-            "title": "Date Of Birth"
-          },
-          "birth_state": {
-            "type": "string",
-            "title": "Birth State"
-          },
-          "gender": {
-            "type": "string",
-            "title": "Gender"
-          },
-          "street": {
-            "type": "string",
-            "title": "Street"
-          },
-          "exterior_number": {
-            "type": "string",
-            "title": "Exterior Number"
-          },
-          "neighborhood": {
-            "type": "string",
-            "title": "Neighborhood"
-          },
-          "city": {
-            "type": "string",
-            "title": "City"
-          },
-          "zip_code": {
-            "type": "string",
-            "title": "Zip Code"
-          },
-          "second_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Second Name"
-          },
-          "interior_number": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Interior Number"
-          },
-          "curp": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Curp"
-          },
-          "rfc": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Rfc"
-          }
-        },
-        "type": "object",
-        "required": [
-          "first_name",
-          "last_name",
-          "maternal_last_name",
-          "date_of_birth",
-          "birth_state",
-          "gender",
-          "street",
-          "exterior_number",
-          "neighborhood",
-          "city",
-          "zip_code"
-        ],
-        "title": "KycCreate"
       },
       "KycPatch": {
         "properties": {
