@@ -557,76 +557,6 @@
             }
           }
         }
-      },
-      "patch": {
-        "tags": [
-          "contact-information"
-        ],
-        "summary": "Patch Application Kyc",
-        "operationId": "patch_application_kyc_crm_v1_applications__bid__kyc_patch",
-        "parameters": [
-          {
-            "name": "bid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Bid"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/KycPatch"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataEnvelope"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/crm/v1/otp-logs": {
@@ -1085,78 +1015,8 @@
           "contact-information"
         ],
         "summary": "Upsert Employment",
-        "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured). employment_status may be omitted (or sent as null); upstream still requires it, so the gateway fills it with \"EMPLOYED\".",
+        "description": "Upsert (201 insert / 200 update). Side effect on insert: advances the application substatus to 53 (employment captured). Every field is optional: any upstream-required field the caller omits (or sends as null) is filled with a placeholder (five spaces for employer_name, 0 for the numbers, \"EMPLOYED\" for employment_status).",
         "operationId": "upsert_employment_crm_v1_applications__bid__employment_post",
-        "parameters": [
-          {
-            "name": "bid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Bid"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmploymentInput"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataEnvelope"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetail"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "contact-information"
-        ],
-        "summary": "Patch Employment",
-        "operationId": "patch_employment_crm_v1_applications__bid__employment_patch",
         "parameters": [
           {
             "name": "bid",
@@ -1228,7 +1088,7 @@
           "contact-information"
         ],
         "summary": "Upsert Career",
-        "description": "Upsert (201 insert / 200 update).",
+        "description": "Upsert (201 insert / 200 update). Every field is optional: education_level is required upstream, so when omitted (or sent as null) the gateway fills it with a placeholder (five spaces).",
         "operationId": "upsert_career_crm_v1_applications__bid__careers_post",
         "parameters": [
           {
@@ -1246,7 +1106,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CareerInput"
+                "$ref": "#/components/schemas/CareerPatch"
               }
             }
           }
@@ -3152,54 +3012,6 @@
         ],
         "title": "BiometricsFinishInput"
       },
-      "CareerInput": {
-        "properties": {
-          "education_level": {
-            "type": "string",
-            "title": "Education Level"
-          },
-          "institution": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Institution"
-          },
-          "field_of_study": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Field Of Study"
-          },
-          "graduation_year": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "maximum": 2100.0,
-                "minimum": 1900.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Graduation Year"
-          }
-        },
-        "type": "object",
-        "required": [
-          "education_level"
-        ],
-        "title": "CareerInput"
-      },
       "CareerPatch": {
         "properties": {
           "education_level": {
@@ -3573,86 +3385,6 @@
           "contract_signed"
         ],
         "title": "DocumentStatusResponse"
-      },
-      "EmploymentInput": {
-        "properties": {
-          "employer_name": {
-            "type": "string",
-            "title": "Employer Name"
-          },
-          "monthly_income": {
-            "type": "number",
-            "minimum": 0.0,
-            "title": "Monthly Income"
-          },
-          "seniority_months": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Seniority Months"
-          },
-          "employment_status": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Employment Status"
-          },
-          "additional_income": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Additional Income"
-          },
-          "occupation": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Occupation"
-          },
-          "sector": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Sector"
-          },
-          "profession": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Profession"
-          }
-        },
-        "type": "object",
-        "required": [
-          "employer_name",
-          "monthly_income",
-          "seniority_months"
-        ],
-        "title": "EmploymentInput"
       },
       "EmploymentPatch": {
         "properties": {
