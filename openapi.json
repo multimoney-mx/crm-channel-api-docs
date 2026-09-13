@@ -1603,7 +1603,7 @@
           "contact-information"
         ],
         "summary": "Create Banking",
-        "description": "Registers the bank account (CLABE) linked to the application. Forwards to contact-information-xp which handles the account verification flow.",
+        "description": "Registers the bank account (CLABE) linked to the application. Forwards to contact-information-xp which handles the account verification flow. Raw passthrough: upstream answers {'ok': true} here, not the usual data envelope.",
         "operationId": "create_banking_crm_v1_applications__bid__banking_post",
         "parameters": [
           {
@@ -1631,9 +1631,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataEnvelope"
-                }
+                "schema": {}
               }
             }
           },
