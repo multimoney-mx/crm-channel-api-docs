@@ -2565,7 +2565,7 @@
           "account-verification"
         ],
         "summary": "Check bank account verification result",
-        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification identified by `bid` (referenceId) and `externalRef`. Returns 404 while the result is not yet available.",
+        "description": "Returns the final verification result (`DONE` or `FAILED`) for the verification identified by `bid` (referenceId). Resolves the `externalRef` automatically from the application's banking data. Returns 404 while the result is not yet available.",
         "operationId": "account_checked_crm_v1_account_verification__bid__check_get",
         "parameters": [
           {
@@ -2575,15 +2575,6 @@
             "schema": {
               "type": "string",
               "title": "Bid"
-            }
-          },
-          {
-            "name": "externalRef",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Externalref"
             }
           }
         ],
