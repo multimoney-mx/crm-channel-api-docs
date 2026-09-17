@@ -1884,6 +1884,146 @@
         }
       }
     },
+    "/crm/v1/applications/{bid}/credit-offer": {
+      "post": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Upsert Credit Offer",
+        "description": "Upsert the credit offer presented to the applicant. If a previous offer existed it is replaced and sale_amount / monthly_payment / accepted_at are reset.",
+        "operationId": "upsert_credit_offer_crm_v1_applications__bid__credit_offer_post",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreditOfferUpsert"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "contact-information"
+        ],
+        "summary": "Accept Credit Offer",
+        "description": "Registers the credit offer accepted by the user during the agent call. Sets the sale_amount and monthly_payment chosen and marks the offer as accepted. Returns 404 if no credit offer exists for the application.",
+        "operationId": "accept_credit_offer_crm_v1_applications__bid__credit_offer_patch",
+        "parameters": [
+          {
+            "name": "bid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreditOfferAccept"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/crm/v1/applications/{bid}/access-tokens": {
       "post": {
         "tags": [
@@ -2384,16 +2524,6 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSaleRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2932,85 +3062,6 @@
         ],
         "title": "AccountCheckedResponse"
       },
-      "AddressRequest": {
-        "properties": {
-          "state": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "State"
-          },
-          "municipality": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Municipality"
-          },
-          "district": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "District"
-          },
-          "street": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Street"
-          },
-          "externalNumber": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Externalnumber"
-          },
-          "internalNumber": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Internalnumber"
-          },
-          "zipCode": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Zipcode"
-          }
-        },
-        "type": "object",
-        "required": [
-          "street",
-          "externalNumber",
-          "zipCode"
-        ],
-        "title": "AddressRequest"
-      },
       "AggregateHealthResponse": {
         "properties": {
           "status": {
@@ -3151,31 +3202,6 @@
         ],
         "title": "ApplicationCreate"
       },
-      "BankAccountRequest": {
-        "properties": {
-          "bankCode": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Bankcode"
-          },
-          "accountNumber": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Accountnumber"
-          },
-          "bankAccountId": {
-            "type": "integer",
-            "title": "Bankaccountid"
-          }
-        },
-        "type": "object",
-        "required": [
-          "bankCode",
-          "accountNumber",
-          "bankAccountId"
-        ],
-        "title": "BankAccountRequest"
-      },
       "BankingInput": {
         "properties": {
           "clabe": {
@@ -3269,70 +3295,6 @@
         "type": "object",
         "title": "CareerPatch"
       },
-      "CreateSaleRequest": {
-        "properties": {
-          "user": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "User"
-          },
-          "uniqueIdentifier": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uniqueidentifier"
-          },
-          "incode": {
-            "$ref": "#/components/schemas/IncodeRequest"
-          },
-          "customer": {
-            "$ref": "#/components/schemas/CustomerRequest"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressRequest"
-          },
-          "creditOffer": {
-            "$ref": "#/components/schemas/CreditOfferRequest"
-          },
-          "bankAccount": {
-            "$ref": "#/components/schemas/BankAccountRequest"
-          },
-          "references": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/ReferenceRequest"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "References"
-          }
-        },
-        "type": "object",
-        "required": [
-          "incode",
-          "customer",
-          "address",
-          "creditOffer",
-          "bankAccount"
-        ],
-        "title": "CreateSaleRequest"
-      },
       "CreateSaleResponse": {
         "properties": {
           "saleId": {
@@ -3357,37 +3319,116 @@
         ],
         "title": "CreateSaleResponse"
       },
-      "CreditOfferRequest": {
+      "CreditOfferAccept": {
         "properties": {
-          "saleAmount": {
+          "sale_amount": {
             "type": "number",
-            "title": "Saleamount"
+            "exclusiveMinimum": 0.0,
+            "title": "Sale Amount"
           },
-          "creditLimit": {
+          "monthly_payment": {
             "type": "number",
-            "title": "Creditlimit"
+            "exclusiveMinimum": 0.0,
+            "title": "Monthly Payment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sale_amount",
+          "monthly_payment"
+        ],
+        "title": "CreditOfferAccept"
+      },
+      "CreditOfferUpsert": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Decision"
           },
-          "installmentAmount": {
+          "product_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Product Id"
+          },
+          "product_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Product Name"
+          },
+          "segment_id": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Segment Id"
+          },
+          "credit_limit": {
             "type": "number",
-            "title": "Installmentamount"
+            "exclusiveMinimum": 0.0,
+            "title": "Credit Limit"
+          },
+          "minimum_disbursement": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Minimum Disbursement"
+          },
+          "maximum_disbursement": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Maximum Disbursement"
+          },
+          "monthly_rate": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Monthly Rate"
+          },
+          "annual_rate": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Annual Rate"
           },
           "term": {
             "type": "integer",
+            "exclusiveMinimum": 0.0,
             "title": "Term"
           },
-          "product": {
-            "type": "integer",
-            "title": "Product"
+          "payment": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Payment"
+          },
+          "commission_rate": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Commission Rate"
+          },
+          "cat": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Cat"
+          },
+          "payment_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Date"
           },
           "cycle": {
-            "type": "integer",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Cycle"
           },
-          "termPromotion": {
-            "type": "integer",
-            "title": "Termpromotion"
-          },
-          "segmentId": {
+          "promotion_term_id": {
             "anyOf": [
               {
                 "type": "integer"
@@ -3396,169 +3437,26 @@
                 "type": "null"
               }
             ],
-            "title": "Segmentid"
+            "title": "Promotion Term Id"
           }
         },
         "type": "object",
         "required": [
-          "saleAmount",
-          "creditLimit",
-          "installmentAmount",
+          "decision",
+          "product_id",
+          "product_name",
+          "segment_id",
+          "credit_limit",
+          "minimum_disbursement",
+          "maximum_disbursement",
+          "monthly_rate",
+          "annual_rate",
           "term",
-          "product",
-          "cycle",
-          "termPromotion"
+          "payment",
+          "commission_rate",
+          "cat"
         ],
-        "title": "CreditOfferRequest"
-      },
-      "CustomerRequest": {
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Firstname"
-          },
-          "middleName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Middlename"
-          },
-          "firstLastName": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Firstlastname"
-          },
-          "secondLastName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Secondlastname"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Dateofbirth"
-          },
-          "placeOfBirth": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Placeofbirth"
-          },
-          "curp": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Curp"
-          },
-          "rfc": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Rfc"
-          },
-          "voterIdKey": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Voteridkey"
-          },
-          "gender": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ],
-            "title": "Gender"
-          },
-          "profession": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Profession"
-          },
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Phonenumber"
-          },
-          "grossMonthlyIncome": {
-            "type": "number",
-            "title": "Grossmonthlyincome"
-          },
-          "occupation": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Occupation"
-          },
-          "employer": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Employer"
-          }
-        },
-        "type": "object",
-        "required": [
-          "firstName",
-          "firstLastName",
-          "dateOfBirth",
-          "curp",
-          "rfc",
-          "gender",
-          "email",
-          "phoneNumber",
-          "grossMonthlyIncome"
-        ],
-        "title": "CustomerRequest"
+        "title": "CreditOfferUpsert"
       },
       "DataEnvelope": {
         "properties": {
@@ -3924,26 +3822,6 @@
         },
         "type": "object",
         "title": "HealthResponse"
-      },
-      "IncodeRequest": {
-        "properties": {
-          "accessToken": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Accesstoken"
-          },
-          "signLink": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Signlink"
-          }
-        },
-        "type": "object",
-        "required": [
-          "accessToken",
-          "signLink"
-        ],
-        "title": "IncodeRequest"
       },
       "KycPatch": {
         "properties": {
@@ -4564,37 +4442,6 @@
         ],
         "title": "ProblemDetail",
         "description": "RFC 9457 Problem Details for HTTP APIs.\n\nAll upstream error conventions ({error}, {success:false,...}, and native\nproblem+json) are normalized into this shape. `errors` and `upstream_status`\nare extension members (RFC 9457 \u00a73.2)."
-      },
-      "ReferenceRequest": {
-        "properties": {
-          "referenceNumber": {
-            "type": "integer",
-            "title": "Referencenumber"
-          },
-          "fullName": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Fullname"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Phonenumber"
-          },
-          "relationshipId": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Relationshipid"
-          }
-        },
-        "type": "object",
-        "required": [
-          "referenceNumber",
-          "fullName",
-          "phoneNumber",
-          "relationshipId"
-        ],
-        "title": "ReferenceRequest"
       },
       "SubstatusPatch": {
         "properties": {
