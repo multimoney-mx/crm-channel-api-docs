@@ -2914,6 +2914,69 @@
         }
       }
     },
+    "/crm/v1/credit-offer/clients/{bin_id}/offers": {
+      "get": {
+        "tags": [
+          "credit-offer"
+        ],
+        "summary": "Get credit offers for a client",
+        "description": "Returns all credit offers associated with the given bin_id from credit-offer-svc.",
+        "operationId": "get_client_offers_crm_v1_credit_offer_clients__bin_id__offers_get",
+        "parameters": [
+          {
+            "name": "bin_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bin Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get Client Offers Crm V1 Credit Offer Clients  Bin Id  Offers Get"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Client or upstream-reported error (validation, not found, conflict, rate limit), as RFC 9457 Problem Details.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream service unreachable or timed out (urn:problem:crm-channel-api:upstream-unreachable / upstream-timeout).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/crm/v1/account-verification/{bid}/check": {
       "get": {
         "tags": [
