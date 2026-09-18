@@ -2983,6 +2983,15 @@
               "type": "string",
               "title": "Bin Id"
             }
+          },
+          {
+            "name": "bid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bid"
+            }
           }
         ],
         "responses": {
