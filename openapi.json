@@ -2635,7 +2635,7 @@
           "platform-core"
         ],
         "summary": "Manual disburse",
-        "description": "Validates that the CLABE account is verified before disbursing. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled).",
+        "description": "Validates that the CLABE account is verified before disbursing, and that the contract is signed unless the outcome is a cancellation. `finalStatus` sets the outcome (`Activo` = approved, `Anulado` = cancelled). Side effect on success: sets substatus 83 (Activo) or 44 (Anulado).",
         "operationId": "manual_disburse_crm_v1_sale__bid__disburse_post",
         "parameters": [
           {
