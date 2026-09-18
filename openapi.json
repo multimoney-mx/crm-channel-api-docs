@@ -2020,7 +2020,7 @@
           "contact-information"
         ],
         "summary": "Accept Credit Offer",
-        "description": "Registers the credit offer accepted by the user during the agent call. Sets the sale_amount and monthly_payment chosen and marks the offer as accepted. Returns 404 if no credit offer exists for the application.",
+        "description": "Registers the credit offer accepted by the user during the agent call. Sets the sale_amount and monthly_payment chosen and marks the offer as accepted. Returns 404 if no credit offer exists for the application. Side effect: sets substatus 57 (credit offer accepted).",
         "operationId": "accept_credit_offer_crm_v1_applications__bid__credit_offer_patch",
         "parameters": [
           {
@@ -2572,7 +2572,7 @@
           "platform-core"
         ],
         "summary": "Create sale",
-        "description": "Validates that the CLABE account is verified before creating the sale. Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when the CLABE is not verified or a supplied catalog name does not match.",
+        "description": "Validates that the CLABE account is verified before creating the sale. Resolves catalog fields (`customer.gender`/`profession`/`occupation`, `address.state`/`municipality`/`district`, `bankAccount.bankCode`) to api-core IDs, then creates the sale. Address IDs may be omitted in favor of `address.zipCode`. Returns 422 when the CLABE is not verified or a supplied catalog name does not match. Side effect on success: sets substatus 80 (sale created).",
         "operationId": "create_sale_crm_v1_sale__bid__post",
         "parameters": [
           {
