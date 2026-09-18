@@ -2966,27 +2966,18 @@
         }
       }
     },
-    "/crm/v1/credit-offer/clients/{bin_id}/offers": {
+    "/crm/v1/credit-offer/clients/{bid}/offers": {
       "get": {
         "tags": [
           "credit-offer"
         ],
         "summary": "Get credit offers for a client",
-        "description": "Returns all credit offers associated with the given bin_id from credit-offer-svc.",
-        "operationId": "get_client_offers_crm_v1_credit_offer_clients__bin_id__offers_get",
+        "description": "Returns all credit offers associated with the given bid from credit-offer-svc.",
+        "operationId": "get_client_offers_crm_v1_credit_offer_clients__bid__offers_get",
         "parameters": [
           {
-            "name": "bin_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Bin Id"
-            }
-          },
-          {
             "name": "bid",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string",
@@ -3000,7 +2991,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response Get Client Offers Crm V1 Credit Offer Clients  Bin Id  Offers Get"
+                  "title": "Response Get Client Offers Crm V1 Credit Offer Clients  Bid  Offers Get"
                 }
               }
             }
